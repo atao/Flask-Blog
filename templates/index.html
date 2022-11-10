@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>{% block title %} Welcome to FlaskBlog {% endblock %}</h1>
+<br>
+<form class="d-flex" role="search" method="post">
+    <input class="form-control me-2" type="text" placeholder="Search" aria-label="Search"
+           name="search"
+           required>
+    <button class="btn btn-outline-success" type="submit" value="Search">Search</button>
+</form><br>
+{% for post in posts %}
+<a href="{{ url_for('post', post_id=post['id']) }}">
+    <h2>{{ post['title'] }}</h2>
+</a>
+<span class="badge text-bg-primary">{{ post['created'] }}</span>
+<a href="{{ url_for('edit', id=post['id']) }}">
+    <span class="badge text-bg-warning">Edit</span>
+</a>
+<hr>
+{% endfor %}
+{% endblock %}
