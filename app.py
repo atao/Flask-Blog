@@ -35,9 +35,10 @@ def index():
         if not posts:
             flash('No results for "{}"'.format(data["search"]))
     else:
+        search_string = ""
         posts = conn.execute('SELECT * FROM posts').fetchall()
     conn.close()
-    return render_template('index.html', posts=posts)
+    return render_template('index.html', posts=posts, search_string=search_string)
 
 
 @app.route('/<int:post_id>')
