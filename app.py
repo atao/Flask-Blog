@@ -99,5 +99,10 @@ def delete(id):
     return redirect(url_for('index'))
 
 
+mode="dev"
+
 if __name__ == '__main__':
-    app.run(debug=True, ssl_context='adhoc')
+    if mode == "dev":
+        app.run(debug=True, port=8080, ssl_context='adhoc')
+    else:
+        serve(app, host='0.0.0.0', port=8080, threads=4, url_prefix="/app")
