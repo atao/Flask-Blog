@@ -103,6 +103,6 @@ mode="dev"
 
 if __name__ == '__main__':
     if mode == "dev":
-        app.run(debug=True, port=8080, ssl_context='adhoc')
+        app.run(debug=True, port=8080)
     else:
-        serve(app, host='0.0.0.0', port=8080, threads=4, url_prefix="/app")
+        serve(app, host='0.0.0.0', port=8080, threads=4, ssl_context='adhoc', url_prefix="/app")
