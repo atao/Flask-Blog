@@ -1,6 +1,8 @@
 # https://python.developpez.com/tutoriel/intro-flask-python3/
 
 import sqlite3
+import markdown
+from waitress import serve
 from flask import Flask, render_template, request, url_for, flash, redirect
 from werkzeug.exceptions import abort
 
@@ -44,6 +46,8 @@ def index():
 @app.route('/<int:post_id>')
 def post(post_id):
     post = get_post(post_id)
+    post = dict(post)
+    post['content'] = markdown.markdown(post['content'])
     return render_template('post.html', post=post)
 
 
@@ -105,4 +109,4 @@ if __name__ == '__main__':
     if mode == "dev":
         app.run(debug=True, port=8080)
     else:
-        serve(app, host='0.0.0.0', port=8080, threads=4, ssl_context='adhoc', url_prefix="/app")
+        serve(app, host='0.0.0.0', port=8080, threads=4, url_prefix="/app")
