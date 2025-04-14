@@ -2,6 +2,7 @@
 
 import sqlite3
 import markdown
+import bleach
 from waitress import serve
 from flask import Flask, render_template, request, url_for, flash, redirect
 from werkzeug.exceptions import abort
@@ -21,6 +22,15 @@ def get_post(post_id):
     if post is None:
         abort(404)
     return post
+
+
+def clean_html(content):
+    """
+    Nettoie le contenu HTML pour éviter les attaques XSS.
+    """
+    allowed_tags = list(bleach.sanitizer.ALLOWED_TAGS) + ['p', 'h1', 'h2', 'h3', 'strong', 'em', 'ul', 'ol', 'li', 'a']
+    allowed_attributes = {'a': ['href', 'title']}
+    return bleach.clean(content, tags=allowed_tags, attributes=allowed_attributes)
 
 
 app = Flask(__name__)
@@ -47,7 +57,10 @@ def index():
 def post(post_id):
     post = get_post(post_id)
     post = dict(post)
-    post['content'] = markdown.markdown(post['content'])
+    # Rendre le Markdown
+    raw_html = markdown.markdown(post['content'], extensions=['extra'])
+    # Nettoyer le HTML avec la fonction clean_html
+    post['content'] = clean_html(raw_html)
     return render_template('post.html', post=post)
 
 
@@ -60,9 +73,12 @@ def create():
         if not title:
             flash('Title is required!')
         else:
+            # Nettoyer le contenu avec la fonction clean_html
+            cleaned_content = clean_html(content)
+
             conn = get_db_connection()
             conn.execute('INSERT INTO posts (title, content) VALUES (?, ?)',
-                         (title, content))
+                         (title, cleaned_content))
             conn.commit()
             conn.close()
             return redirect(url_for('index'))
@@ -81,10 +97,13 @@ def edit(id):
         if not title:
             flash('Title is required!')
         else:
+            # Nettoyer le contenu avec bleach
+            cleaned_content = clean_html(content)
+
             conn = get_db_connection()
             conn.execute('UPDATE posts SET title = ?, content = ?'
                          ' WHERE id = ?',
-                         (title, content, id))
+                         (title, cleaned_content, id))
             conn.commit()
             conn.close()
             return redirect(url_for('index'))
