@@ -14,4 +14,4 @@ pycparser==2.22
 pyOpenSSL==25.0.0
 waitress==2.1.2
 webencodings==0.5.1
-Werkzeug==2.2.3
+Werkzeug==3.1.6
