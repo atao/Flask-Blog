@@ -12,6 +12,6 @@ Markdown==3.8
 MarkupSafe==3.0.2
 pycparser==2.22
 pyOpenSSL==25.0.0
-waitress==2.1.2
+waitress==3.0.1
 webencodings==0.5.1
 Werkzeug==3.1.6
