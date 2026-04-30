@@ -12,6 +12,7 @@
     <div class="mb-3">
         <label for="content" class="form-label">Content</label>
         <textarea name="content" class="form-control" id="exampleFormControlTextarea1" rows="3">{{ request.form['content'] or post['content'] }}</textarea>
+        <script>const easyMDE = new EasyMDE();</script>
     </div>
     <div class="col-auto">
         <button type="submit" class="btn btn-primary mb-3">Update</button>
