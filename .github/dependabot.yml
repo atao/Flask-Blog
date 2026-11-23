@@ -1,0 +1,16 @@
+# Dependabot : mises à jour des dépendances Python (requirements.txt),
+# regroupées dans une PR par semaine.
+version: 2
+updates:
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      timezone: "Europe/Paris"
+    open-pull-requests-limit: 5
+    groups:
+      python:
+        patterns: ["*"]
+    commit-message:
+      prefix: "Dépendances"
